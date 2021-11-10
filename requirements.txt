@@ -1,0 +1,5 @@
+black==21.10b0
+flake8==4.0.1
+requests==2.26.0
+python-barcode==0.13.1
+python-decouple==3.5
