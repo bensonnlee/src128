@@ -7,10 +7,14 @@ from decouple import config
 class Driver:
     ses = requests.Session()
 
-    def __init__(self):
+    def __init__(
+        self,
+    ):
         self.execution = ""
 
-    def start_login(self):
+    def start_login(
+        self,
+    ):
         url = "https://innosoftfusiongo.com/sso/login/login-start.php?id=124"
 
         headers = {
@@ -24,7 +28,9 @@ class Driver:
 
         self.ses.get(url, headers=headers)
 
-    def get_execution(self):
+    def get_execution(
+        self,
+    ):
         url = "https://auth.ucr.edu/cas/login?service=https%3A%2F%2Finnosoftfusiongo.com%2Fsso%2Flogin%2Flogin-process-cas.php"
 
         headers = {
@@ -43,7 +49,12 @@ class Driver:
         execution = resp.text.split('name="execution" value="')[1].split('"')[0]
         return execution
 
-    def login(self, execution):
+    def login(
+        self,
+        execution: str,
+        username: str,
+        password: str,
+    ):
         url = "https://auth.ucr.edu/cas/login?service=https%3A%2F%2Finnosoftfusiongo.com%2Fsso%2Flogin%2Flogin-process-cas.php"
 
         headers = {
@@ -60,13 +71,16 @@ class Driver:
             "Accept-Language": "en-US",
         }
 
-        payload = f"username={quote(config('RWEBUSERNAME'))}&password={quote(config('RWEBPASSWORD'))}&execution={quote(execution)}&_eventId=submit&geolocation="
+        payload = f"username={quote(username)}&password={quote(password)}&execution={quote(execution)}&_eventId=submit&geolocation="
 
         resp = self.ses.post(url, headers=headers, data=payload)
 
         return resp.url
 
-    def login_finish(self, referer):
+    def login_finish(
+        self,
+        referer: str,
+    ):
         url = "https://innosoftfusiongo.com/sso/login/login-finish.php"
 
         headers = {
@@ -88,7 +102,10 @@ class Driver:
         bearer = resp.headers["Fusion-Token"]
         return bearer
 
-    def barcode(self, bearer):
+    def barcode(
+        self,
+        bearer: str,
+    ):
         url = "https://innosoftfusiongo.com/sso/api/barcode.php?id=124"
 
         headers = {
