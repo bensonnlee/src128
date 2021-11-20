@@ -7,7 +7,7 @@ import uvicorn
 from core.main import generate_id
 from fastapi import FastAPI
 
-from api.models import Auth
+from api.schemas import Auth
 
 app = FastAPI(docs_url="/")
 
