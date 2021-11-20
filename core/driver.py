@@ -1,7 +1,6 @@
 from urllib.parse import quote
 
 import requests
-from decouple import config
 
 
 class Driver:
