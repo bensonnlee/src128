@@ -1,6 +1,7 @@
 from urllib.parse import quote
 
 import requests
+from requests import Response
 
 
 class Driver:
@@ -29,7 +30,7 @@ class Driver:
 
     def get_execution(
         self,
-    ):
+    ) -> str:
         url = "https://auth.ucr.edu/cas/login?service=https%3A%2F%2Finnosoftfusiongo.com%2Fsso%2Flogin%2Flogin-process-cas.php"
 
         headers = {
@@ -53,7 +54,7 @@ class Driver:
         execution: str,
         username: str,
         password: str,
-    ):
+    ) -> str:
         url = "https://auth.ucr.edu/cas/login?service=https%3A%2F%2Finnosoftfusiongo.com%2Fsso%2Flogin%2Flogin-process-cas.php"
 
         headers = {
@@ -79,7 +80,7 @@ class Driver:
     def login_finish(
         self,
         referer: str,
-    ):
+    ) -> str:
         url = "https://innosoftfusiongo.com/sso/login/login-finish.php"
 
         headers = {
@@ -104,7 +105,7 @@ class Driver:
     def barcode(
         self,
         bearer: str,
-    ):
+    ) -> str:
         url = "https://innosoftfusiongo.com/sso/api/barcode.php?id=124"
 
         headers = {
