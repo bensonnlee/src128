@@ -5,17 +5,19 @@ from starlette.responses import Response
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import typing
+
 import uvicorn
 from core.main import authenticate, generate_id
 from core.response_handler import response_formatter
 from core.schemas import Auth
 from fastapi import FastAPI
 
-app = FastAPI(root_path="/api", docs_url="/")
+app = FastAPI(docs_url="/")
 
 
 @app.post("/authenticate")
-def authenticate(
+def verify_credentials(
     auth: Auth,
 ):
     try:
@@ -48,4 +50,4 @@ def generate_barcode(
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
