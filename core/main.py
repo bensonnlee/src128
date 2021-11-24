@@ -16,6 +16,7 @@ def authenticate(
 ):
     execution = driver.get_execution()
     referer = driver.login(execution, username, password)
+    driver.end()
 
     if "?ticket=ST" in referer:
         return True
@@ -32,5 +33,6 @@ def generate_id(
     referer = driver.login(execution, username, password)
     bearer = driver.login_finish(referer)
     barcode_id = driver.barcode(bearer)
+    driver.end()
 
     return barcode_id

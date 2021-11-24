@@ -1,3 +1,4 @@
+from os import get_exec_path
 from urllib.parse import quote
 
 import requests
@@ -121,3 +122,8 @@ class Driver:
         resp = self.ses.get(url, headers=headers)
 
         return resp.json()[0]["AppBarcodeIdNumber"]
+
+    def end(
+        self,
+    ):
+
