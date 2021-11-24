@@ -126,4 +126,4 @@ class Driver:
     def end(
         self,
     ):
-
+        self.ses.cookies.clear()
