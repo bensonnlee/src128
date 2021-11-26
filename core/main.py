@@ -14,6 +14,7 @@ def authenticate(
     username: str,
     password: str,
 ):
+    driver.start_login()
     execution = driver.get_execution()
     referer = driver.login(execution, username, password)
     driver.end()

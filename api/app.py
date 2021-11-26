@@ -31,11 +31,11 @@ def verify_credentials(
 
         if authenticated:
             return response_formatter(
-                200, message="Success", data={"Authenticated": True}
+                200, message="Success", data={"authenticated": True}
             )
         else:
             return response_formatter(
-                401, message="Invalid credentials", data={"Authenticated": False}
+                401, message="Invalid credentials", data={"authenticated": False}
             )
     except Exception as e:
         log.info(traceback.format_exc())
