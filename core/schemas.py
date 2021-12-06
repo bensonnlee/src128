@@ -4,11 +4,19 @@ from pydantic import BaseModel
 
 
 # Login Model(s)
-class Auth(BaseModel):
-    """API payload model"""
+class AuthPayload(BaseModel):
+    """API auth payload model"""
 
     username: str
     password: str
+
+
+class BarcodePayload(BaseModel):
+    """API barcode payload model"""
+
+    username: str
+    password: str
+    fusion_key: Optional[str] = ""
 
 
 # Response Model(s)

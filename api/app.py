@@ -9,7 +9,7 @@ import traceback
 import uvicorn
 from core.main import authenticate, generate_id
 from core.response_handler import response_formatter
-from core.schemas import Auth
+from core.schemas import AuthPayload, BarcodePayload
 from decouple import config
 from fastapi import FastAPI
 from logdna import LogDNAHandler
@@ -24,10 +24,10 @@ log.addHandler(log_dna)
 
 @app.post("/authenticate")
 def verify_credentials(
-    auth: Auth,
+    auth_payload: AuthPayload,
 ):
     try:
-        authenticated = authenticate(auth.username, auth.password)
+        authenticated = authenticate(auth_payload.username, auth_payload.password)
 
         if authenticated:
             return response_formatter(
@@ -44,13 +44,19 @@ def verify_credentials(
 
 @app.post("/barcode_id")
 def generate_barcode(
-    auth: Auth,
+    barcode_payload: BarcodePayload,
 ):
     try:
-        barcode_id = generate_id(auth.username, auth.password)
+        fusion_key, barcode_id = generate_id(
+            barcode_payload.username,
+            barcode_payload.password,
+            barcode_payload.fusion_key,
+        )
 
         return response_formatter(
-            200, message="Success", data={"barcode_id": barcode_id}
+            200,
+            message="Success",
+            data={"barcode_id": barcode_id, "fusion_key": fusion_key},
         )
     except Exception as e:
         log.info(traceback.format_exc())
