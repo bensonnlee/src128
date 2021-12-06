@@ -3,8 +3,6 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from decouple import config
-
 from core.driver import Driver
 
 driver = Driver()
@@ -17,7 +15,6 @@ def authenticate(
     driver.start_login()
     execution = driver.get_execution()
     referer = driver.login(execution, username, password)
-    driver.end()
 
     if "?ticket=ST" in referer:
         return True
@@ -28,12 +25,19 @@ def authenticate(
 def generate_id(
     username: str,
     password: str,
+    fusion_key: str,
 ):
+    if fusion_key:
+        try:
+            barcode_id = driver.barcode(fusion_key)
+            return fusion_key, barcode_id
+        except KeyError:
+            pass
+
     driver.start_login()
     execution = driver.get_execution()
     referer = driver.login(execution, username, password)
     bearer = driver.login_finish(referer)
     barcode_id = driver.barcode(bearer)
-    driver.end()
 
-    return barcode_id
+    return bearer, barcode_id
