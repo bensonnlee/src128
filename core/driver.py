@@ -1,8 +1,14 @@
-from os import get_exec_path
+import logging
 from urllib.parse import quote
 
 import requests
-from requests import Response
+from decouple import config
+from logdna import LogDNAHandler
+
+log = logging.getLogger("logdna")
+log.setLevel(logging.INFO)
+log_dna = LogDNAHandler(config("LOGDNA_INGESTION_KEY"))
+log.addHandler(log_dna)
 
 
 class Driver:
@@ -16,6 +22,7 @@ class Driver:
     def start_login(
         self,
     ):
+        self.ses.cookies.clear()
         url = "https://innosoftfusiongo.com/sso/login/login-start.php?id=124"
 
         headers = {
@@ -46,6 +53,7 @@ class Driver:
             "Accept-Encoding": "gzip, deflate, br",
         }
         resp = self.ses.get(url, headers=headers)
+        log.info(resp.text, {"level": "Debug"})
 
         execution = resp.text.split('name="execution" value="')[1].split('"')[0]
         return execution
@@ -99,6 +107,7 @@ class Driver:
         }
 
         resp = self.ses.post(url, headers=headers)
+        log.info(resp.text, {"level": "Debug"})
 
         bearer = resp.headers["Fusion-Token"]
         return bearer
@@ -122,8 +131,3 @@ class Driver:
         resp = self.ses.get(url, headers=headers)
 
         return resp.json()[0]["AppBarcodeIdNumber"]
-
-    def end(
-        self,
-    ):
-        self.ses.cookies.clear()
