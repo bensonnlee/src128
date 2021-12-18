@@ -10,12 +10,15 @@ def response_formatter(
     data: dict = {},
 ) -> dict:
     """
-    Formats API responses to be returned by all endpoints
+    Format API responses to be returned in a standardized format
 
-    Returns:
-        A dict containing a status code, message, data, and optionally a cookie
+    :param status_code: HTTP status code
+    :param message: message to be returned
+    :param data: data to be returned
+
+    :returns: dict containing status code, message, and data
     """
-    # Determines if the response is an erorr based on the status code
+    # Determines if the response is an error based on the status code
     is_error = False if status_code < 400 else True
     response = APIResponse(
         status_code=status_code, error=is_error, message=message, data=data

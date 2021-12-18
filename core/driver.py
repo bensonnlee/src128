@@ -5,6 +5,7 @@ import requests
 from decouple import config
 from logdna import LogDNAHandler
 
+# Set up logging with LogDNA
 log = logging.getLogger("logdna")
 log.setLevel(logging.INFO)
 log_dna = LogDNAHandler(config("LOGDNA_INGESTION_KEY"))
@@ -22,6 +23,9 @@ class Driver:
     def start_login(
         self,
     ):
+        """
+        Retrieve cookies from login page and attach to session
+        """
         self.ses.cookies.clear()
         url = "https://innosoftfusiongo.com/sso/login/login-start.php?id=124"
 
@@ -39,6 +43,11 @@ class Driver:
     def get_execution(
         self,
     ) -> str:
+        """
+        Extract execution string from login page
+
+        :return: execution string
+        """
         url = "https://auth.ucr.edu/cas/login?service=https%3A%2F%2Finnosoftfusiongo.com%2Fsso%2Flogin%2Flogin-process-cas.php"
 
         headers = {
@@ -64,6 +73,15 @@ class Driver:
         username: str,
         password: str,
     ) -> str:
+        """
+        Send login paylaod to UCR CAS endpoint
+
+        :param execution: execution string from login page
+        :param username: username
+        :param password: password
+
+        :return: url with ST query parameter
+        """
         url = "https://auth.ucr.edu/cas/login?service=https%3A%2F%2Finnosoftfusiongo.com%2Fsso%2Flogin%2Flogin-process-cas.php"
 
         headers = {
@@ -90,6 +108,13 @@ class Driver:
         self,
         referer: str,
     ) -> str:
+        """
+        Get fusion token from login finish endpoint
+
+        :param referer: url with ST query parameter
+
+        :return: fusion token
+        """
         url = "https://innosoftfusiongo.com/sso/login/login-finish.php"
 
         headers = {
@@ -116,6 +141,13 @@ class Driver:
         self,
         bearer: str,
     ) -> str:
+        """
+        Get barcode from barcode endpoint
+
+        :param bearer: fusion token
+
+        :return: barcode id number
+        """
         url = "https://innosoftfusiongo.com/sso/api/barcode.php?id=124"
 
         headers = {

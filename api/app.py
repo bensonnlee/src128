@@ -16,6 +16,7 @@ from logdna import LogDNAHandler
 
 app = FastAPI(docs_url="/")
 
+# Set up logging with LogDNA
 log = logging.getLogger("logdna")
 log.setLevel(logging.INFO)
 log_dna = LogDNAHandler(config("LOGDNA_INGESTION_KEY"))
@@ -26,6 +27,11 @@ log.addHandler(log_dna)
 def verify_credentials(
     auth_payload: AuthPayload,
 ):
+    """
+    Authenticate user credentials
+
+    :param auth_payload:
+    """
     try:
         authenticated = authenticate(auth_payload.username, auth_payload.password)
 
@@ -46,13 +52,23 @@ def verify_credentials(
 def generate_barcode(
     barcode_payload: BarcodePayload,
 ):
+    """
+    Generate barcode id
+
+    :param barcode_payload:
+    """
     try:
         fusion_key, barcode_id = generate_id(
             barcode_payload.username,
             barcode_payload.password,
             barcode_payload.fusion_key,
         )
-
+        if not fusion_key and not barcode_id:
+            return response_formatter(
+                401,
+                message="Invalid credentials",
+                data={"authenticated": False},
+            )
         return response_formatter(
             200,
             message="Success",
