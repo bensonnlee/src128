@@ -50,6 +50,18 @@ class AuthAPIResponse(BaseModel):
         values["error"] = error
         return values
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "status_code": 200,
+                "error": False,
+                "message": "Success",
+                "data": {
+                    "authenticated": True,
+                },
+            }
+        }
+
 
 class BarcodeAPIResponse(BaseModel):
     """API barcode response model"""
@@ -66,3 +78,16 @@ class BarcodeAPIResponse(BaseModel):
 
         values["error"] = error
         return values
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "status_code": 200,
+                "error": False,
+                "message": "Success",
+                "data": {
+                    "barcode_id": "&829379242633&",
+                    "fusion_key": "rkSLBJr9fEtq6n1rzSzgzlnJ2HgcSUDSTCHPJJBIjByPGdCUV0OdRt41T2NXFSngNAxQDrTF_8jwPhn7wq5IrQiy1CEFb_77rScsszBQ-DzYCSKlW5b8sjedv4Ow7dgkqW7yN-UoK9Qkq2Knsl6d30ObCbrZB5X53goP7ieErNHMnXM3fCpOS9M70Ud8TNK-F387HwWXNo6-vw1Gb4uXEhffk9tUWohYvWwpzfpbn0E0b2qPO9VYAc9pUjCpul44vVTFxzIeQRaDICdY-iDxV8P5Ry3CW9ytLHrWZKedES0uR7EJ2ho434rOrtL3-cxnQ-ATCGMhsXCmFtYagA4z6FcmzJsh8YlX-4Ir6xNqLdZEdsjpTn8Rw5hz2h74358C",
+                },
+            }
+        }

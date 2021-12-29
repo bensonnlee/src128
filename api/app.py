@@ -27,7 +27,11 @@ log_dna = LogDNAHandler(config("LOGDNA_INGESTION_KEY"))
 log.addHandler(log_dna)
 
 
-@app.post("/authenticate", response_model=AuthAPIResponse)
+@app.post(
+    "/authenticate",
+    response_model=AuthAPIResponse,
+    response_model_exclude_none=True,
+)
 def verify_credentials(
     auth_payload: AuthPayload,
 ):
@@ -59,7 +63,11 @@ def verify_credentials(
         )
 
 
-@app.post("/barcode_id", response_model=BarcodeAPIResponse)
+@app.post(
+    "/barcode_id",
+    response_model=BarcodeAPIResponse,
+    response_model_exclude_none=True,
+)
 def generate_barcode(
     barcode_payload: BarcodePayload,
 ):
