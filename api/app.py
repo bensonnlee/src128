@@ -7,6 +7,10 @@ import logging
 import traceback
 
 import uvicorn
+from decouple import config
+from fastapi import FastAPI
+from logdna import LogDNAHandler
+
 from core.main import authenticate, generate_id
 from core.schemas import (
     AuthAPIResponse,
@@ -14,9 +18,6 @@ from core.schemas import (
     BarcodeAPIResponse,
     BarcodePayload,
 )
-from decouple import config
-from fastapi import FastAPI
-from logdna import LogDNAHandler
 
 app = FastAPI(docs_url="/")
 
