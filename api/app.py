@@ -57,12 +57,14 @@ def verify_credentials(
         if authenticated:
             return dict(
                 status_code=200,
+                error=False,
                 message="Success",
                 data={"authenticated": True},
             )
         else:
             return dict(
                 status_code=401,
+                error=True,
                 message="Invalid credentials",
                 data={"authenticated": False},
             )
@@ -70,6 +72,7 @@ def verify_credentials(
         log.info(traceback.format_exc())
         return dict(
             status_code=500,
+            error=True,
             message=str(e),
         )
 
@@ -96,11 +99,13 @@ def generate_barcode(
         if not fusion_key and not barcode_id:
             return dict(
                 status_code=401,
+                error=True,
                 message="Invalid credentials",
                 data={"authenticated": False},
             )
         return dict(
             status_code=200,
+            error=False,
             message="Success",
             data={"barcode_id": barcode_id, "fusion_key": fusion_key},
         )
@@ -108,6 +113,7 @@ def generate_barcode(
         log.info(traceback.format_exc())
         return dict(
             status_code=500,
+            error=True,
             message=str(e),
         )
 
