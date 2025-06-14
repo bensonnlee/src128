@@ -3,13 +3,15 @@ from urllib.parse import quote
 
 import requests
 from decouple import config
-from logdna import LogDNAHandler
 
-# Set up logging with LogDNA
-log = logging.getLogger("logdna")
+# Set up console logging
+log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
-log_dna = LogDNAHandler(config("LOGDNA_INGESTION_KEY"))
-log.addHandler(log_dna)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+log.addHandler(console_handler)
 
 
 class Driver:
@@ -62,7 +64,7 @@ class Driver:
             "Accept-Encoding": "gzip, deflate, br",
         }
         resp = self.ses.get(url, headers=headers)
-        log.info(resp.text, {"level": "Debug"})
+        log.info(f"Response text: {resp.text}")
 
         execution = resp.text.split('name="execution" value="')[1].split('"')[0]
         return execution
@@ -132,7 +134,7 @@ class Driver:
         }
 
         resp = self.ses.post(url, headers=headers)
-        log.info(resp.text, {"level": "Debug"})
+        log.info(f"Response text: {resp.text}")
 
         bearer = resp.headers["Fusion-Token"]
         return bearer

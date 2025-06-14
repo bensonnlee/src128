@@ -9,7 +9,6 @@ import traceback
 import uvicorn
 from decouple import config
 from fastapi import FastAPI
-from logdna import LogDNAHandler
 
 from core.main import authenticate, generate_id
 from core.schemas import (
@@ -21,11 +20,22 @@ from core.schemas import (
 
 app = FastAPI(docs_url="/")
 
-# Set up logging with LogDNA
-log = logging.getLogger("logdna")
+# Set up console logging
+log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
-log_dna = LogDNAHandler(config("LOGDNA_INGESTION_KEY"))
-log.addHandler(log_dna)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+log.addHandler(console_handler)
+
+
+@app.get("/")
+def root():
+    """
+    Health check endpoint
+    """
+    return {"status": "healthy", "message": "FastAPI service is running"}
 
 
 @app.post(
@@ -103,4 +113,6 @@ def generate_barcode(
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    # Use PORT environment variable from Cloud Run, fallback to 8080
+    port = int(os.environ.get("PORT", 8080))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
